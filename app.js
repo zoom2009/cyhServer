@@ -42,6 +42,22 @@ app.post('/post', (req, res) => {
     })
 })
 
+app.get('/get', (req, res) => {
+    db.collection('data').find().toArray().then((doc) => {
+        res.send(doc)
+    }, (err) => {
+        res.status(400).send(err)
+    })
+})
+
+app.get('/getlast', (req, res) => {
+    db.collection('data').find().toArray().then((doc) => {
+        res.send(doc[doc.length-1])
+    }, (err) => {
+        res.status(400).send(err)
+    })
+})
+
 app.listen(process.env.PORT || 3000, () => {
     console.log('is listening on port 3000')
 })

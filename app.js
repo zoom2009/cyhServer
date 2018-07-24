@@ -25,14 +25,18 @@ app.post('/post', (req, res) => {
         lng: req.body.lng,
         hum: req.body.hum,
         temp: req.body.temp,
-        Watch: req.body.Watch
+        Watch: req.body.Watch,
+        date: req.body.date,
+        time: req.body.time
     }
     db.collection('data').insertOne({
         lat: data.lat,
         lng: data.lng,
         hum: data.hum,
         temp: data.temp,
-        Watch: data.Watch
+        Watch: data.Watch,
+        date: data.date,
+        time: data.time
     }, (err, result) => {
         if(err){
             res.status(400).send(err)

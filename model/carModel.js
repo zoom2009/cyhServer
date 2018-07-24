@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 var CarSchema = new Schema({
+    key: String,
     id: {
         type: String, 
         required: true,

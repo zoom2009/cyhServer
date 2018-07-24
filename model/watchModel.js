@@ -13,7 +13,7 @@ var Watch = mongoose.model('Watch', new Schema({
         required: true
     },
     time: {
-        type: String, 
+        type: Number, 
         required: true
     },
     lat: {

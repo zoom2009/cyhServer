@@ -6,14 +6,16 @@ const hash = require('object-hash');
 const {Car} = require('./model/carModel')
 const {Watch} = require('./model/watchModel')
 
-let t = {
-    name : 'sikarin',
-    age: 20
-}
+//========================== Playground ============================
 
-console.log(hash(t))
 
-console.log(hash(t))
+let str = "9:28:10";
+console.log(makeMulitime(str))
+
+
+
+//==================================================================
+
 
 
 const port = process.env.PORT || 3000 ;
@@ -27,6 +29,14 @@ mongoose.connect(process.env.MONGODB_URI ||'mongodb://localhost/cyhDB')
 var app = express()
 app.use(bodyParser.json())
 
+
+function makeMulitime(timeStr) {
+    let t = timeStr.split(":")
+    let hour = parseInt(t[0]) * 3600
+    let min = parseInt(t[1]) * 60
+    let sec = parseInt(t[2])
+    return hour+min+sec
+}
 
 function waitAsyAndRes200(countStatus, postData) {
     console.log(countStatus)
@@ -45,16 +55,83 @@ app.get('/', (req, res) => {
     res.send('Server is created...')
 })
 
-app.post('/signup', (req, res) => {
-    
+app.get('/watch/:id', (req, res) => {
+    let key = {
+        id: req.params.id,
+        who: req.headers.who,
+        secretKey: req.headers.secret_key
+    }
+    let h = hash(key)
+    Watch.find({
+        key: h
+    }).then((data) => {
+        res.send(data)
+    }, (e) => {
+        res.status(400).send(e)
+    })
+})
+
+app.get('/watch/:id/:timestart/:timeend', (req, res) => {
+    let timeStart = makeMulitime(req.params.timestart)
+    let timeEnd = makeMulitime(req.params.timeEnd)
+    let key = {
+        id: req.params.id,
+        who: req.headers.who,
+        secretKey: req.headers.secret_key
+    }
+    let h = hash(key)
+    Watch.find({
+        key: h,
+        time: { $gte: timeStart, $lte: timeEnd },
+    }).then((data) => {
+        res.send(data)
+    }, (e) => {
+        res.status(400).send(e)
+    })
+})
+
+app.get('/car/:id', (req, res) => {
+    let key = {
+        id: req.params.id,
+        who: req.headers.who,
+        secretKey: req.headers.secret_key
+    }
+    let h = hash(key)
+    Car.find({
+        key: h
+    }).then((data) => {
+        res.send(data)
+    }, (e) => {
+        res.status(400).send(e)
+    })
+})
+
+app.get('/car/:id/:timestart/:timeend', (req, res) => {
+    let timeStart = makeMulitime(req.params.timestart)
+    let timeEnd = makeMulitime(req.params.timeEnd)
+    let key = {
+        id: req.params.id,
+        who: req.headers.who,
+        secretKey: req.headers.secret_key
+    }
+    let h = hash(key)
+    Car.find({
+        key: h,
+        time: { $gte: timeStart, $lte: timeEnd },
+    }).then((data) => {
+        res.send(data)
+    }, (e) => {
+        res.status(400).send(e)
+    })
 })
 
 app.post('/post', (req, res) => {
     var countStatus = 0 // 1 = success, 0 = fail
+    let t = makeMulitime(req.body.time)
     let postData = {
         id: req.body.id,
         date: req.body.date,
-        time: req.body.time,
+        time: t,
         lat: req.body.lat,
         lng: req.body.lng,
         temp: req.body.temp,

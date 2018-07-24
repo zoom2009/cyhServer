@@ -1,67 +1,94 @@
 const express = require('express')
+const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
-const MongoClient = require('mongodb').MongoClient;
+//export from another files
+const {Car} = require('./model/carModel')
+const {Watch} = require('./model/watchModel')
 
-var db
-MongoClient.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/KidData', (err, mydb) => {
-  if(err){
-    return console.log('DB Error')
-  }
-  console.log("Connected successfully to server")
-  db = mydb
-})
+const port = process.env.PORT || 3000 ;
+
+mongoose.Promise = global.Promise;
+
+mongoose.connect(process.env.MONGODB_URI ||'mongodb://localhost/cyhDB')
+  .then(() =>  console.log('@@@ Connection db is succes @@@'))
+  .catch((err) => console.error('!!! Fail to connect db !!!'));
 
 var app = express()
-
 app.use(bodyParser.json())
 
+
+function waitAsyAndRes200(countStatus, postData) {
+    console.log(countStatus)
+    if(countStatus === postData.watch.length+1){
+        //res.send('is saved')
+        countStatus = 0 
+        console.log('done')
+        return true
+    }else {
+        countStatus = 0
+        return false
+    }
+}
+
 app.get('/', (req, res) => {
-    res.send('server is created...')
+    res.send('Server is created...')
 })
 
 app.post('/post', (req, res) => {
-    let data = {
+    var countStatus = 0 // 1 = success, 0 = fail
+    let postData = {
+        id: req.body.id,
+        date: req.body.date,
+        time: req.body.time,
         lat: req.body.lat,
         lng: req.body.lng,
-        hum: req.body.hum,
         temp: req.body.temp,
-        Watch: req.body.Watch,
-        date: req.body.date,
-        time: req.body.time
+        hum: req.body.hum,
+        watch: req.body.watch
     }
-    db.collection('data').insertOne({
-        lat: data.lat,
-        lng: data.lng,
-        hum: data.hum,
-        temp: data.temp,
-        Watch: data.Watch,
-        date: data.date,
-        time: data.time
-    }, (err, result) => {
-        if(err){
-            res.status(400).send(err)
-        }else if(result){
-            res.send(result)
+
+    let newCar = Car(postData)
+    newCar.save().then((doc) => {
+        countStatus++
+        console.log('+++')
+        if(waitAsyAndRes200(countStatus, postData)) {
+            res.send('is Saved')
         }
+    }, (e) => {
+        countStatus = 0 
+        res.status(400).send(e)
+        return
     })
+    
+    for(let i=0;i<postData.watch.length;i++) {
+        let watchData = {
+            id: postData.watch[i].mac_address,
+            carID: postData.id,
+            date: postData.date,
+            time: postData.time,
+            lat: postData.lat,
+            lng: postData.lng,
+            temp: postData.temp,
+            hum: postData.hum
+        }
+        let newWatch = new Watch(watchData)
+        newWatch.save().then((doc) => {
+            countStatus++
+            console.log('+++')
+            if(i===postData.watch.length-1) {
+                if(waitAsyAndRes200(countStatus, postData)) {
+                    res.send('is Saved')
+                }
+            }
+        }, (e) => {
+            countStatus = 0 
+            res.status(400).send(e)
+            return
+        })
+    }
+    
 })
 
-app.get('/get', (req, res) => {
-    db.collection('data').find().toArray().then((doc) => {
-        res.send(doc)
-    }, (err) => {
-        res.status(400).send(err)
-    })
-})
-
-app.get('/getlast', (req, res) => {
-    db.collection('data').find().toArray().then((doc) => {
-        res.send(doc[doc.length-1])
-    }, (err) => {
-        res.status(400).send(err)
-    })
-})
-
-app.listen(process.env.PORT || 3000, () => {
-    console.log('is listening on port 3000')
+app.listen(port, () => {
+    console.log('is listening on port '+port)
 })

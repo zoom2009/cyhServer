@@ -164,7 +164,7 @@ app.get('/car/:id', (req, res) => {
 
 app.get('/car/:id/:timestart/:timeend', (req, res) => {
     let timeStart = makeMulitime(req.params.timestart)
-    let timeEnd = makeMulitime(req.params.timeEnd)
+    let timeEnd = makeMulitime(req.params.timeend)
     let key = {
         id: req.params.id,
         who: req.headers.who,

@@ -9,12 +9,9 @@ const {Watch} = require('./model/watchModel')
 
 //========================== Playground ============================
 
- 
 
 
 //==================================================================
-
-
 
 const port = process.env.PORT || 3000 ;
 
@@ -31,9 +28,28 @@ app.use(bodyParser.json())
 
 function makeMulitime(timeStr) {
     let t = timeStr.split(":")
-    let hour = parseInt(t[0]) * 3600
-    let min = parseInt(t[1]) * 60
-    let sec = parseInt(t[2])
+    let hour
+    let min
+    let sec
+
+    if(t[0].length===2 && t[0][0]==='0'){
+        hour = parseInt(t[0][1]) * 3600
+    }else {
+        hour = parseInt(t[0]) * 3600
+    }
+
+    if(t[1].length===2 && t[1][0]==='0'){
+        min = parseInt(t[1][1]) * 60
+    }else {
+        min = parseInt(t[1]) * 60
+    }
+    
+    if(t[2].length===2 && t[2][0]==='0'){
+        sec = parseInt(t[2][1])
+    }else {
+        sec = parseInt(t[2])
+    }
+
     return hour+min+sec
 }
 
@@ -91,8 +107,11 @@ app.get('/watch/:id', (req, res) => {
 })
 
 app.get('/watch/:id/:timestart/:timeend', (req, res) => {
+    console.log('path')
     let timeStart = makeMulitime(req.params.timestart)
-    let timeEnd = makeMulitime(req.params.timeEnd)
+    let timeEnd = makeMulitime(req.params.timeend)
+    console.log('start', timeStart)
+    console.log('end', timeEnd)
     let key = {
         id: req.params.id,
         who: req.headers.who,

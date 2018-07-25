@@ -9,9 +9,6 @@ const {Watch} = require('./model/watchModel')
 //========================== Playground ============================
 
 
-let str = "9:28:10";
-console.log(makeMulitime(str))
-
 
 
 //==================================================================
@@ -55,6 +52,22 @@ app.get('/', (req, res) => {
     res.send('Server is created...')
 })
 
+app.get('/watch', (req, res) => {
+    let key = {
+        who: req.headers.who,
+        secretKey: req.headers.secret_key
+    }
+    if(hash(key) === hash({who: 'admin', secretKey: 'cyhggt'})) {
+        Watch.find().then((data) => {
+            res.send(data)
+        }, (e) => {
+            res.status(400).send(e)
+        })
+    }else {
+        res.status(400).send('Permision denined!')
+    }
+})
+
 app.get('/watch/:id', (req, res) => {
     let key = {
         id: req.params.id,
@@ -88,6 +101,22 @@ app.get('/watch/:id/:timestart/:timeend', (req, res) => {
     }, (e) => {
         res.status(400).send(e)
     })
+})
+
+app.get('/car', (req, res) => {
+    let key = {
+        who: req.headers.who,
+        secretKey: req.headers.secret_key
+    }
+    if(hash(key) === hash({who: 'admin', secretKey: 'cyhggt'})) {
+        Car.find().then((data) => {
+            res.send(data)
+        }, (e) => {
+            res.status(400).send(e)
+        })
+    }else {
+        res.status(400).send('Permision denined!')
+    }
 })
 
 app.get('/car/:id', (req, res) => {

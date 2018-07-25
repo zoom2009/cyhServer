@@ -6,6 +6,7 @@ const hash = require('object-hash');
 const {Car} = require('./model/carModel')
 const {Watch} = require('./model/watchModel')
 
+
 //========================== Playground ============================
 
 
@@ -26,6 +27,7 @@ mongoose.connect(process.env.MONGODB_URI ||'mongodb://localhost/cyhDB')
 var app = express()
 app.use(bodyParser.json())
 
+//###################################  FUNCTION  ##################################################
 
 function makeMulitime(timeStr) {
     let t = timeStr.split(":")
@@ -48,9 +50,13 @@ function waitAsyAndRes200(countStatus, postData) {
     }
 }
 
+//#################################################################################################
+
 app.get('/', (req, res) => {
     res.send('Server is created...')
 })
+
+//================================ WATCH CAR ==================================================
 
 app.get('/watch', (req, res) => {
     let key = {
@@ -102,6 +108,8 @@ app.get('/watch/:id/:timestart/:timeend', (req, res) => {
         res.status(400).send(e)
     })
 })
+
+//================================ API CAR ==================================================
 
 app.get('/car', (req, res) => {
     let key = {
@@ -222,5 +230,6 @@ app.post('/post', (req, res) => {
 })
 
 app.listen(port, () => {
-    console.log('is listening on port '+port)
+    console.log('is listening on port ' + port)
 })
+

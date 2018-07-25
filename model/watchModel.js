@@ -2,7 +2,8 @@ const mongoose = require('mongoose')
 
 var Schema = mongoose.Schema
 
-var Watch = mongoose.model('Watch', new Schema({
+var WatchSchema = new Schema({
+
     key: String,
     id: {
         type: String, 
@@ -36,7 +37,11 @@ var Watch = mongoose.model('Watch', new Schema({
         type: String, 
         required: true
     }
-}))
+})
+
+WatchSchema.index({ date: 1, time: 1, id: 1}, { unique: true });
+
+var Watch = mongoose.model('Watch', WatchSchema);
 
 module.exports = {
     Watch

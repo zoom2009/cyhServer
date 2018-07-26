@@ -128,6 +128,30 @@ app.get('/watch/:id/:timestart/:timeend', (req, res) => {
     })
 })
 
+app.get('/watch/:id:/date/:timestart/:timeend', (req, res) => {
+    console.log('path')
+    let timeStart = makeMulitime(req.params.timestart)
+    let timeEnd = makeMulitime(req.params.timeend)
+    let date = req.params.date
+    console.log('start', timeStart)
+    console.log('end', timeEnd)
+    let key = {
+        id: req.params.id,
+        who: req.headers.who,
+        secretKey: req.headers.secret_key
+    }
+    let h = hash(key)
+    Watch.find({
+        date: date,
+        key: h,
+        time: { $gte: timeStart, $lte: timeEnd },
+    }).then((data) => {
+        res.send(data)
+    }, (e) => {
+        res.status(400).send(e)
+    })
+})
+
 //================================ API CAR ==================================================
 
 app.get('/car', (req, res) => {
@@ -172,6 +196,27 @@ app.get('/car/:id/:timestart/:timeend', (req, res) => {
     }
     let h = hash(key)
     Car.find({
+        key: h,
+        time: { $gte: timeStart, $lte: timeEnd },
+    }).then((data) => {
+        res.send(data)
+    }, (e) => {
+        res.status(400).send(e)
+    })
+})
+
+app.get('/car/:id:/date/:timestart/:timeend', (req, res) => {
+    let timeStart = makeMulitime(req.params.timestart)
+    let timeEnd = makeMulitime(req.params.timeend)
+    let date = req.params.date
+    let key = {
+        id: req.params.id,
+        who: req.headers.who,
+        secretKey: req.headers.secret_key
+    }
+    let h = hash(key)
+    Car.find({
+        date: date,
         key: h,
         time: { $gte: timeStart, $lte: timeEnd },
     }).then((data) => {

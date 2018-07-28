@@ -106,6 +106,22 @@ app.get('/watch/:id', (req, res) => {
     })
 })
 
+app.get('/watch/:id/getlast', (req, res) => {
+    let key = {
+        id: req.params.id,
+        who: req.headers.who,
+        secretKey: req.headers.secret_key
+    }
+    let h = hash(key)
+    Watch.find({
+        key: h
+    }).then((data) => {
+        res.send(data[data.length-1])
+    }, (e) => {
+        res.status(400).send(e)
+    })
+})
+
 app.get('/watch/:id/:timestart/:timeend', (req, res) => {
     console.log('path')
     let timeStart = makeMulitime(req.params.timestart)
@@ -181,6 +197,21 @@ app.get('/car/:id', (req, res) => {
         key: h
     }).then((data) => {
         res.send(data)
+    }, (e) => {
+        res.status(400).send(e)
+    })
+})
+
+app.get('/car/:id/getlast', (req, res) => {
+    let key = {
+        id: req.params.id,
+        who: req.headers.who,
+        secretKey: req.headers.secret_key
+    }
+    Car.find({
+        key: h
+    }).then((data) => {
+        res.send(data[data.length-1])
     }, (e) => {
         res.status(400).send(e)
     })

@@ -1,7 +1,17 @@
-const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const hash = require('object-hash');
+var http = require('http')
+var express = require('express')
+
+var socketio = require('socket.io')
+var app = express()
+var server = http.Server(app)
+var port = process.env.PORT || 3000
+var websocket = socketio(server);
+server.listen(port, () => {
+    console.log('is listening on port', port)
+})
 //export from another files
 const {Car} = require('./model/carModel')
 const {Watch} = require('./model/watchModel')
@@ -9,11 +19,12 @@ const {Watch} = require('./model/watchModel')
 
 //========================== Playground ============================
 
-
+websocket.on('connection', (socket) => {
+    console.log('A client just joined on', socket.id);
+    socket.emit('channel-name', 'Hello world!');
+});
 
 //==================================================================
-
-const port = process.env.PORT || 3000 ;
 
 mongoose.Promise = global.Promise;
 
@@ -323,8 +334,3 @@ app.post('/post', (req, res) => {
     }
     
 })
-
-app.listen(port, () => {
-    console.log('is listening on port ' + port)
-})
-

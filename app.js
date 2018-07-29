@@ -18,10 +18,17 @@ const {Watch} = require('./model/watchModel')
 
 
 //========================== Playground ============================
+app.use(bodyParser.json())
 
 websocket.on('connection', (socket) => {
     console.log('A client just joined on', socket.id);
     socket.emit('channel-name', 'Hello world!');
+
+    app.post('/testsocket', (req, res) => {
+        socket.emit('send message', req.body.data)
+        res.send('posted', req.body.data)
+    })
+
 });
 
 //==================================================================
@@ -32,8 +39,9 @@ mongoose.connect(process.env.MONGODB_URI ||'mongodb://localhost/cyhDB')
   .then(() =>  console.log('@@@ Connection db is succes @@@'))
   .catch((err) => console.error('!!! Fail to connect db !!!'));
 
-var app = express()
-app.use(bodyParser.json())
+
+
+
 
 //###################################  FUNCTION  ##################################################
 

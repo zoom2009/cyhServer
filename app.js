@@ -28,7 +28,7 @@ websocket.on('connection', (socket) => {
 
 app.post('/testsocket', (req, res) => {
     websocket.emit('send message', req.body.data)
-    res.send('posted', req.body.data)
+    res.send('posted')
 })
 
 //==================================================================

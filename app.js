@@ -24,12 +24,12 @@ websocket.on('connection', (socket) => {
     console.log('A client just joined on', socket.id);
     socket.emit('channel-name', 'Hello world!');
 
-    app.post('/testsocket', (req, res) => {
-        socket.emit('send message', req.body.data)
-        res.send('posted', req.body.data)
-    })
-
 });
+
+app.post('/testsocket', (req, res) => {
+    websocket.emit('send message', req.body.data)
+    res.send('posted', req.body.data)
+})
 
 //==================================================================
 

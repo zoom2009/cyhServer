@@ -56,6 +56,17 @@ app.post('/signin', (req, res) => {
     })
 })
 
+app.get('/user/:id/:password', (req, res) => {
+    User.find({
+        id: req.params.id,
+        password: req.params.password
+    }).then((doc) => {
+        res.send(doc)
+    }, (e) => {
+        res.status(400).send(e)
+    })
+})
+
 //==================================================================
 
 

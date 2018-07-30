@@ -12,6 +12,9 @@ var UserSchema = new Schema({
         type: String, 
         required: true,
     },
+    firstName: String,
+    lasttName: String,
+    picURL: String,
     mac_address: {
         type: String, 
         required: true,

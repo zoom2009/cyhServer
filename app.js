@@ -15,6 +15,15 @@ server.listen(port, () => {
 //export from another files
 const {Car} = require('./model/carModel')
 const {Watch} = require('./model/watchModel')
+const {User} = require('./model/userModel')
+
+//========================== Data Base ============================
+
+mongoose.Promise = global.Promise;
+
+mongoose.connect(process.env.MONGODB_URI ||'mongodb://localhost/cyhDB')
+  .then(() =>  console.log('@@@ Connection db is succes @@@'))
+  .catch((err) => console.error('!!! Fail to connect db !!!'));
 
 
 //========================== Playground ============================
@@ -31,13 +40,24 @@ app.post('/testsocket', (req, res) => {
     res.send('posted')
 })
 
+app.post('/signin', (req, res) => {
+    let newUser = new User({
+        id: req.body.id,
+        password: req.body.password,
+        mac_address: req.body.mac_address,
+        phone_number: req.body.phone_number,
+        homeLocation: req.body.homeLocation,
+        schoolLocation: req.body.schoolLocation,
+    })
+    newUser.save().then((doc) => {
+        res.send(doc)
+    }, (e) => {
+        res.status(400).send(e)
+    })
+})
+
 //==================================================================
 
-mongoose.Promise = global.Promise;
-
-mongoose.connect(process.env.MONGODB_URI ||'mongodb://localhost/cyhDB')
-  .then(() =>  console.log('@@@ Connection db is succes @@@'))
-  .catch((err) => console.error('!!! Fail to connect db !!!'));
 
 
 
@@ -91,33 +111,33 @@ app.get('/', (req, res) => {
     res.send('Server is created...')
 })
 
-//================================ API WATCH ==================================================
-
-app.get('/watch', (req, res) => {
-    let key = {
-        who: req.headers.who,
-        secretKey: req.headers.secret_key
-    }
-    if(hash(key) === hash({who: 'admin', secretKey: 'cyhggt'})) {
-        Watch.find().then((data) => {
-            res.send(data)
-        }, (e) => {
-            res.status(400).send(e)
-        })
-    }else {
-        res.status(400).send('Permision denined!')
+app.get('/remove/:model', (req, res) => {
+    switch(req.params.model) {
+        case 'car':
+            Car.remove().then((d) => {res.send(d)}, (e) => {res.status(400).send(e)})
+            break
+        case 'watch':
+            Watch.remove().then((d) => {res.send(d)}, (e) => {res.status(400).send(e)})
+            break
+        case 'user':
+            User.remove().then((d) => {res.send(d)}, (e) => {res.status(400).send(e)})
+            break
     }
 })
 
+//================================ API WATCH ==================================================
+
+app.get('/watch', (req, res) => {
+    Watch.find().then((data) => {
+        res.send(data)
+    }, (e) => {
+        res.status(400).send(e)
+    })
+})
+
 app.get('/watch/:id', (req, res) => {
-    let key = {
-        id: req.params.id,
-        who: req.headers.who,
-        secretKey: req.headers.secret_key
-    }
-    let h = hash(key)
     Watch.find({
-        key: h
+        id: req.params.id
     }).then((data) => {
         res.send(data)
     }, (e) => {
@@ -126,14 +146,8 @@ app.get('/watch/:id', (req, res) => {
 })
 
 app.get('/watch/:id/getlast', (req, res) => {
-    let key = {
-        id: req.params.id,
-        who: req.headers.who,
-        secretKey: req.headers.secret_key
-    }
-    let h = hash(key)
     Watch.find({
-        key: h
+        id: req.params.id
     }).then((data) => {
         res.send(data[data.length-1])
     }, (e) => {
@@ -147,15 +161,9 @@ app.get('/watch/:id/:timestart/:timeend', (req, res) => {
     let timeEnd = makeMulitime(req.params.timeend)
     console.log('start', timeStart)
     console.log('end', timeEnd)
-    let key = {
-        id: req.params.id,
-        who: req.headers.who,
-        secretKey: req.headers.secret_key
-    }
-    let h = hash(key)
     Watch.find({
-        key: h,
-        time: { $gte: timeStart, $lte: timeEnd },
+        id: req.params.id,
+        time: { $gte: timeStart, $lte: timeEnd }
     }).then((data) => {
         res.send(data)
     }, (e) => {
@@ -170,15 +178,9 @@ app.get('/watch/:id:/date/:timestart/:timeend', (req, res) => {
     let date = req.params.date
     console.log('start', timeStart)
     console.log('end', timeEnd)
-    let key = {
-        id: req.params.id,
-        who: req.headers.who,
-        secretKey: req.headers.secret_key
-    }
-    let h = hash(key)
     Watch.find({
         date: date,
-        key: h,
+        id: req.params.id,
         time: { $gte: timeStart, $lte: timeEnd },
     }).then((data) => {
         res.send(data)
@@ -190,30 +192,16 @@ app.get('/watch/:id:/date/:timestart/:timeend', (req, res) => {
 //================================ API CAR ==================================================
 
 app.get('/car', (req, res) => {
-    let key = {
-        who: req.headers.who,
-        secretKey: req.headers.secret_key
-    }
-    if(hash(key) === hash({who: 'admin', secretKey: 'cyhggt'})) {
-        Car.find().then((data) => {
-            res.send(data)
-        }, (e) => {
-            res.status(400).send(e)
-        })
-    }else {
-        res.status(400).send('Permision denined!')
-    }
+    Car.find().then((data) => {
+        res.send(data)
+    }, (e) => {
+        res.status(400).send(e)
+    })
 })
 
 app.get('/car/:id', (req, res) => {
-    let key = {
-        id: req.params.id,
-        who: req.headers.who,
-        secretKey: req.headers.secret_key
-    }
-    let h = hash(key)
     Car.find({
-        key: h
+        id: req.params.id
     }).then((data) => {
         res.send(data)
     }, (e) => {
@@ -222,13 +210,8 @@ app.get('/car/:id', (req, res) => {
 })
 
 app.get('/car/:id/getlast', (req, res) => {
-    let key = {
-        id: req.params.id,
-        who: req.headers.who,
-        secretKey: req.headers.secret_key
-    }
     Car.find({
-        key: h
+        id: req.params.id
     }).then((data) => {
         res.send(data[data.length-1])
     }, (e) => {
@@ -239,14 +222,8 @@ app.get('/car/:id/getlast', (req, res) => {
 app.get('/car/:id/:timestart/:timeend', (req, res) => {
     let timeStart = makeMulitime(req.params.timestart)
     let timeEnd = makeMulitime(req.params.timeend)
-    let key = {
-        id: req.params.id,
-        who: req.headers.who,
-        secretKey: req.headers.secret_key
-    }
-    let h = hash(key)
     Car.find({
-        key: h,
+        id: req.params.id,
         time: { $gte: timeStart, $lte: timeEnd },
     }).then((data) => {
         res.send(data)
@@ -259,15 +236,9 @@ app.get('/car/:id:/date/:timestart/:timeend', (req, res) => {
     let timeStart = makeMulitime(req.params.timestart)
     let timeEnd = makeMulitime(req.params.timeend)
     let date = req.params.date
-    let key = {
-        id: req.params.id,
-        who: req.headers.who,
-        secretKey: req.headers.secret_key
-    }
-    let h = hash(key)
     Car.find({
         date: date,
-        key: h,
+        id: req.params.id,
         time: { $gte: timeStart, $lte: timeEnd },
     }).then((data) => {
         res.send(data)
@@ -289,14 +260,8 @@ app.post('/post', (req, res) => {
         hum: req.body.hum,
         watch: req.body.watch
     }
-    
     let carData = postData
-    carData.key = hash({
-        id: postData.id,
-        who: 'driver',
-        secretKey: 'cyhggt'
-    })
-    let newCar = Car(carData)
+    let newCar = new Car(carData)
     newCar.save().then((doc) => {
         countStatus++
         console.log('+++')
@@ -321,11 +286,6 @@ app.post('/post', (req, res) => {
             temp: postData.temp,
             hum: postData.hum
         }
-        watchData.key = hash({
-            id: watchData.id,
-            who: 'parent',
-            secretKey: 'cyhggt'
-        })
         let newWatch = new Watch(watchData)
         newWatch.save().then((doc) => {
             countStatus++

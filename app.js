@@ -301,6 +301,7 @@ app.post('/post', (req, res) => {
         countStatus++
         console.log('+++')
         if(waitAsyAndRes200(countStatus, postData)) {
+            websocket.emit('carPost', postData)
             res.send('is Saved')
         }
     }, (e) => {
@@ -331,6 +332,7 @@ app.post('/post', (req, res) => {
             console.log('+++')
             if(i===postData.watch.length-1) {
                 if(waitAsyAndRes200(countStatus, postData)) {
+                    websocket.emit('carPost', postData)
                     res.send('is Saved')
                 }
             }

@@ -171,7 +171,22 @@ app.get('/watch/:id/:timestart/:timeend', (req, res) => {
     })
 })
 
-app.get('/watch/:id:/date/:timestart/:timeend', (req, res) => {
+app.get('/watch/:id/:date', (req, res) => {
+    let date = req.params.date
+    var x = date.replace("_", "/")
+    var y = x.replace("_", "/")
+    Watch.find({
+        date: y,
+        id: req.params.id
+    }).then((data) => {
+        res.send(data)
+    }, (e) => {
+        res.status(400).send(e)
+    })
+})
+
+
+app.get('/watch/:id/:date/:timestart/:timeend', (req, res) => {
     console.log('path')
     let timeStart = makeMulitime(req.params.timestart)
     let timeEnd = makeMulitime(req.params.timeend)

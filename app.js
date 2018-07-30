@@ -176,16 +176,13 @@ app.get('/watch/:id:/date/:timestart/:timeend', (req, res) => {
     let timeStart = makeMulitime(req.params.timestart)
     let timeEnd = makeMulitime(req.params.timeend)
     let date = req.params.date
-    for(let i=0;i<date.length;i++) {
-        if(date[i] == '_') {
-            date[i] = '/'
-        }
-    }
-    console.log(date)
+    var x = date.replace("_", "/")
+    var y = x.replace("_", "/")
+    console.log(y)
     console.log('start', timeStart)
     console.log('end', timeEnd)
     Watch.find({
-        date: date,
+        date: y,
         id: req.params.id,
         time: { $gte: timeStart, $lte: timeEnd },
     }).then((data) => {

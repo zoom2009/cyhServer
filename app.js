@@ -181,6 +181,7 @@ app.get('/watch/:id:/date/:timestart/:timeend', (req, res) => {
             date[i] = '/'
         }
     }
+    console.log(date)
     console.log('start', timeStart)
     console.log('end', timeEnd)
     Watch.find({

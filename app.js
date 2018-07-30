@@ -250,12 +250,28 @@ app.get('/car/:id/:timestart/:timeend', (req, res) => {
     })
 })
 
-app.get('/car/:id:/date/:timestart/:timeend', (req, res) => {
+app.get('/car/:id/:date', (req, res) => {
+    let date = req.params.date
+    var x = date.replace("_", "/")
+    var y = x.replace("_", "/")
+    Car.find({
+        date: y,
+        id: req.params.id
+    }).then((data) => {
+        res.send(data)
+    }, (e) => {
+        res.status(400).send(e)
+    })
+})
+
+app.get('/car/:id/:date/:timestart/:timeend', (req, res) => {
     let timeStart = makeMulitime(req.params.timestart)
     let timeEnd = makeMulitime(req.params.timeend)
     let date = req.params.date
+    var x = date.replace("_", "/")
+    var y = x.replace("_", "/")
     Car.find({
-        date: date,
+        date: y,
         id: req.params.id,
         time: { $gte: timeStart, $lte: timeEnd },
     }).then((data) => {

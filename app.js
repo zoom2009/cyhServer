@@ -40,7 +40,65 @@ app.post('/testsocket', (req, res) => {
     res.send('posted')
 })
 
-app.post('/signin', (req, res) => {
+app.post('/post', (req, res) => {
+    var countStatus = 0 // 1 = success, 0 = fail
+    let t = makeMulitime(req.body.time)
+    let postData = {
+        id: req.body.id,
+        date: req.body.date,
+        time: t,
+        lat: req.body.lat,
+        lng: req.body.lng,
+        temp: req.body.temp,
+        hum: req.body.hum,
+        watch: req.body.watch
+    }
+    let carData = postData
+    let newCar = new Car(carData)
+    newCar.save().then((doc) => {
+        countStatus++
+        console.log('+++')
+        if(waitAsyAndRes200(countStatus, postData)) {
+            websocket.emit('carPost', postData)
+            res.send('is Saved')
+        }
+    }, (e) => {
+        countStatus = 0 
+        res.status(400).send(e)
+        return
+    })
+    
+    for(let i=0;i<postData.watch.length;i++) {
+        let watchData = {
+            id: postData.watch[i].mac_address,
+            carID: postData.id,
+            date: postData.date,
+            time: postData.time,
+            lat: postData.lat,
+            lng: postData.lng,
+            temp: postData.temp,
+            hum: postData.hum
+        }
+        let newWatch = new Watch(watchData)
+        newWatch.save().then((doc) => {
+            countStatus++
+            console.log('+++')
+            if(i===postData.watch.length-1) {
+                if(waitAsyAndRes200(countStatus, postData)) {
+                    websocket.emit('carPost', postData)
+                    res.send('is Saved')
+                }
+            }
+        }, (e) => {
+            countStatus = 0 
+            res.status(400).send(e)
+            return
+        })
+    }
+    
+})
+
+app.post('/signup', (req, res) => {
     let newUser = new User({
         id: req.body.id,
         password: req.body.password,
@@ -292,60 +350,4 @@ app.get('/car/:id/:date/:timestart/:timeend', (req, res) => {
     })
 })
 
-app.post('/post', (req, res) => {
-    var countStatus = 0 // 1 = success, 0 = fail
-    let t = makeMulitime(req.body.time)
-    let postData = {
-        id: req.body.id,
-        date: req.body.date,
-        time: t,
-        lat: req.body.lat,
-        lng: req.body.lng,
-        temp: req.body.temp,
-        hum: req.body.hum,
-        watch: req.body.watch
-    }
-    let carData = postData
-    let newCar = new Car(carData)
-    newCar.save().then((doc) => {
-        countStatus++
-        console.log('+++')
-        if(waitAsyAndRes200(countStatus, postData)) {
-            websocket.emit('carPost', postData)
-            res.send('is Saved')
-        }
-    }, (e) => {
-        countStatus = 0 
-        res.status(400).send(e)
-        return
-    })
-    
-    for(let i=0;i<postData.watch.length;i++) {
-        let watchData = {
-            id: postData.watch[i].mac_address,
-            carID: postData.id,
-            date: postData.date,
-            time: postData.time,
-            lat: postData.lat,
-            lng: postData.lng,
-            temp: postData.temp,
-            hum: postData.hum
-        }
-        let newWatch = new Watch(watchData)
-        newWatch.save().then((doc) => {
-            countStatus++
-            console.log('+++')
-            if(i===postData.watch.length-1) {
-                if(waitAsyAndRes200(countStatus, postData)) {
-                    websocket.emit('carPost', postData)
-                    res.send('is Saved')
-                }
-            }
-        }, (e) => {
-            countStatus = 0 
-            res.status(400).send(e)
-            return
-        })
-    }
-    
-})
+

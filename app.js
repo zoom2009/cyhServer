@@ -53,15 +53,16 @@ app.post('/post', (req, res) => {
         hum: req.body.hum,
         watch: req.body.watch
     }
+    websocket.emit('carPost', postData)
     let carData = postData
     let newCar = new Car(carData)
     newCar.save().then((doc) => {
         countStatus++
         console.log('+++')
-        if(waitAsyAndRes200(countStatus, postData)) {
-            websocket.emit('carPost', postData)
-            res.send('is Saved')
-        }
+        //if(waitAsyAndRes200(countStatus, postData)) {
+         //   websocket.emit('carPost', postData)
+        //    res.send('is Saved')
+        //}
     }, (e) => {
         countStatus = 0 
         res.status(400).send(e)
@@ -84,10 +85,10 @@ app.post('/post', (req, res) => {
             countStatus++
             console.log('+++')
             if(i===postData.watch.length-1) {
-                if(waitAsyAndRes200(countStatus, postData)) {
-                    websocket.emit('carPost', postData)
-                    res.send('is Saved')
-                }
+               // if(waitAsyAndRes200(countStatus, postData)) {
+                //    websocket.emit('carPost', postData)
+                //    res.send('is Saved')
+               // }
             }
         }, (e) => {
             countStatus = 0 
@@ -95,7 +96,7 @@ app.post('/post', (req, res) => {
             return
         })
     }
-    
+    res.send('emited')
 })
 
 app.post('/alert/:mac_address', (req, res) => {

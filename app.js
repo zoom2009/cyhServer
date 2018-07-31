@@ -98,6 +98,21 @@ app.post('/post', (req, res) => {
     
 })
 
+app.post('/alert/:mac_address', (req, res) => {
+    websocket.emit('alert', req.params.mac_address)
+    res.send('is sended alert to Parent and Driver!')
+})
+
+app.post('/finsihtoschool/:mac_address', (req, res) => {
+    websocket.emit('finish school', req.params.mac_address)
+    res.send('is notice to parent <is arrive school>.')
+})
+
+app.post('/finsihtohome/:mac_address', (req, res) => {
+    websocket.emit('finish home', req.params.mac_address)
+    res.send('is notice to parent <is arrive home>.')
+})
+
 app.post('/signup', (req, res) => {
     let newUser = new User({
         id: req.body.id,

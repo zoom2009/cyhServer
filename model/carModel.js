@@ -40,6 +40,10 @@ var CarSchema = new Schema({
             mac_address: {
                 type: String,
                 required: true
+            },
+            rssi: {
+                type: String,
+                default: "none"
             }
         }
     ]

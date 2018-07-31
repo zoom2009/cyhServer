@@ -103,12 +103,12 @@ app.post('/alert/:mac_address', (req, res) => {
     res.send('is sended alert to Parent and Driver!')
 })
 
-app.post('/finsihtoschool/:mac_address', (req, res) => {
+app.post('/finishtoschool/:mac_address', (req, res) => {
     websocket.emit('finish school', req.params.mac_address)
     res.send('is notice to parent <is arrive school>.')
 })
 
-app.post('/finsihtohome/:mac_address', (req, res) => {
+app.post('/finishtohome/:mac_address', (req, res) => {
     websocket.emit('finish home', req.params.mac_address)
     res.send('is notice to parent <is arrive home>.')
 })

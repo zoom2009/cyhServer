@@ -424,17 +424,14 @@ app.get('/watchincar/:id/:timestart/:timeend', (req, res) => {
         }
 
         let Data = []
-        let _1w = {}
-        let _1record = []
-        // default for watch in 1 record
-        for(let i=0;i<cyhWatch_addr.length;i++) {
-            _1record.push({mac_address: 'none', rssi: 'none'})
-        }
-
-        let whatHave = []
 
         for(let i=0;i<data.length;i++) {
             // all watch in 1record
+            let _1record = []
+            // default for watch in 1 record
+            for(let i=0;i<cyhWatch_addr.length;i++) {
+                _1record.push({mac_address: 'none', rssi: 'none'})
+            }
             for(let j=0;j<data[i].watch.length;j++) {
                 // _1watch
                 if(GetPosIsHaveThisWatch(cyhWatch_addr, data[i].watch[j].mac_address) != -1) {
@@ -443,6 +440,7 @@ app.get('/watchincar/:id/:timestart/:timeend', (req, res) => {
                 }
             } 
             Data.push(_1record)
+            
         }
 
         res.send(Data)

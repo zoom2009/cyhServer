@@ -325,9 +325,12 @@ app.get('/car/:id/getlast', (req, res) => {
 app.get('/car/:id/:timestart/:timeend', (req, res) => {
     let timeStart = makeMulitime(req.params.timestart)
     let timeEnd = makeMulitime(req.params.timeend)
+    //db.user.find().sort( { UserId: -1 } ).limit(1)
     Car.find({
         id: req.params.id,
         time: { $gte: timeStart, $lte: timeEnd },
+    }).sort({
+        time: -1
     }).then((data) => {
         res.send(data)
     }, (e) => {

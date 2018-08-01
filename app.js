@@ -383,7 +383,7 @@ app.get('/car/:id/:date/:timestart/:timeend', (req, res) => {
     })
 })
 
-w_data = [
+cyhWatch_addr = [
     'E5:3B:2E:63:83:4B', // 0
     'F4:A7:65:7B:B7:62', // 1
     'E8:3D:77:74:F8:3F', // 2
@@ -392,9 +392,19 @@ w_data = [
     'D5:A4:C9:09:98:F7'  // 5
 ]
 
+
 app.get('/watchincar/:id/:timestart/:timeend', (req, res) => {
     let timeStart = makeMulitime(req.params.timestart)
     let timeEnd = makeMulitime(req.params.timeend)
+
+    function isHaveWatch(cyhWatch_addr, watch_addr) {
+        for(let i=0;i<cyhWatch_addr.length;i++) {
+            if(cyhWatch_addr[i] == watch_addr) {
+                return i
+            }
+        }
+        return -1
+    }
     //db.user.find().sort( { UserId: -1 } ).limit(1)
     Car.find({
         id: req.params.id,
@@ -403,24 +413,39 @@ app.get('/watchincar/:id/:timestart/:timeend', (req, res) => {
         time: 1
     }).select('watch date time')
     .then((data) => {
-        let wdata = []
-        for(let i=0;i<data.length;i++) {
-            let w = []
-            
-            for(let j=0;j<data[i].watch.length;j++) {
-                w.push(data[i].watch[j])
-            }
-            for(let j=0;j<w.length;j++) {
-                for(let k=0;k<w_data.length;k++) {
-                    if(w[j].mac_address == w_data[k]) {
-                        wdata.push(w[j])
-                    }else {
-                        wdata.push('none')
-                    }
+
+        function GetPosIsHaveThisWatch(allAddr, addr) {
+            for(let i=0;i<allAddr.length;i++) {
+                if(allAddr[i] == addr) {
+                    return i
                 }
             }
+            return -1
         }
-        res.send(wdata)
+
+        let Data = []
+        let _1w = {}
+        let _1record = []
+        // default for watch in 1 record
+        for(let i=0;i<cyhWatch_addr.length;i++) {
+            _1record.push({mac_address: 'none', rssi: 'none'})
+        }
+
+        let whatHave = []
+
+        for(let i=0;i<data.length;i++) {
+            // all watch in 1record
+            for(let j=0;j<data[i].watch.length;j++) {
+                // _1watch
+                if(pos = GetPosIsHaveThisWatch(cyhWatch_addr, data[i].watch[j].mac_address) != -1) {
+                    // make self to pos found
+                    _1record[pos] = data[i].watch[j]
+                }
+            } 
+            Data.push(_1record)
+        }
+
+        res.send(Data)
     }, (e) => {
         res.status(400).send(e)
     })
@@ -437,3 +462,4 @@ app.get('/watchincar/:id/:timestart/:timeend', (req, res) => {
 
 
 
+    

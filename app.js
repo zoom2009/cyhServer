@@ -439,9 +439,10 @@ app.get('/watchincar/:id/:timestart/:timeend', (req, res) => {
             }
             for(let j=0;j<data[i].watch.length;j++) {
                 // _1watch
-                if(GetPosIsHaveThisWatch(cyhWatch_addr, data[i].watch[j].mac_address) != -1) {
+                let pos = GetPosIsHaveThisWatch(cyhWatch_addr, data[i].watch[j].mac_address)
+                if(pos != -1) {
                     // make self to pos found
-                    _1record[GetPosIsHaveThisWatch(cyhWatch_addr, data[i].watch[j].mac_address)] = data[i].watch[j]
+                    _1record[pos] = data[i].watch[j].rssi
                 }
             } 
             _1w.watch = _1record

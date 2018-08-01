@@ -445,7 +445,12 @@ app.get('/watchincar/:id/:timestart/:timeend', (req, res) => {
                     _1record[pos] = data[i].watch[j].rssi
                 }
             } 
-            _1w.watch = _1record
+            _1w.rssi1 = _1record[0]
+            _1w.rssi2 = _1record[1]
+            _1w.rssi3 = _1record[2]
+            _1w.rssi4 = _1record[3]
+            _1w.rssi5 = _1record[4]
+            _1w.rssi6 = _1record[5]
             _1w.date = data[i].date
             _1w.timesec = data[i].time
             

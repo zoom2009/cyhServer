@@ -383,6 +383,15 @@ app.get('/car/:id/:date/:timestart/:timeend', (req, res) => {
     })
 })
 
+w_data = [
+    'E5:3B:2E:63:83:4B', // 0
+    'F4:A7:65:7B:B7:62', // 1
+    'E8:3D:77:74:F8:3F', // 2
+    'D8:2A:9A:6F:5A:52', // 3
+    'E3:5C:D4:AB:07:FC', // 4
+    'D5:A4:C9:09:98:F7'  // 5
+]
+
 app.get('/watchincar/:id/:timestart/:timeend', (req, res) => {
     let timeStart = makeMulitime(req.params.timestart)
     let timeEnd = makeMulitime(req.params.timeend)
@@ -394,8 +403,24 @@ app.get('/watchincar/:id/:timestart/:timeend', (req, res) => {
         time: 1
     }).select('watch date time')
     .then((data) => {
-        res.send(data)
-
+        let wdata = []
+        for(let i=0;i<data.length;i++) {
+            let w = []
+            
+            for(let j=0;j<data[i].watch.length;j++) {
+                w.push(data[i].watch[j])
+            }
+            for(let j=0;j<w.length;j++) {
+                for(let k=0;k<w_data.length;k++) {
+                    if(w[j].mac_address == w_data[k]) {
+                        wdata.push(w[j])
+                    }else {
+                        wdata.push('none')
+                    }
+                }
+            }
+        }
+        res.send(wdata)
     }, (e) => {
         res.status(400).send(e)
     })

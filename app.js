@@ -330,7 +330,7 @@ app.get('/car/:id/:timestart/:timeend', (req, res) => {
         id: req.params.id,
         time: { $gte: timeStart, $lte: timeEnd },
     }).sort({
-        time: -1
+        time: 1
     }).then((data) => {
         res.send(data)
     }, (e) => {

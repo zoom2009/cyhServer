@@ -341,8 +341,7 @@ app.get('/car/:id/:timestart/:timeend', (req, res) => {
         time: { $gte: timeStart, $lte: timeEnd },
     }).sort({
         time: 1
-    }).select('watch date time')
-    .then((data) => {
+    }).then((data) => {
         res.send(data)
     }, (e) => {
         res.status(400).send(e)
@@ -384,4 +383,20 @@ app.get('/car/:id/:date/:timestart/:timeend', (req, res) => {
     })
 })
 
+app.get('/watchincar/:id/:timestart/:timeend', (req, res) => {
+    let timeStart = makeMulitime(req.params.timestart)
+    let timeEnd = makeMulitime(req.params.timeend)
+    //db.user.find().sort( { UserId: -1 } ).limit(1)
+    Car.find({
+        id: req.params.id,
+        time: { $gte: timeStart, $lte: timeEnd },
+    }).sort({
+        time: 1
+    }).select('watch date time')
+    .then((data) => {
+        res.send(data)
+    }, (e) => {
+        res.status(400).send(e)
+    })
+})
 

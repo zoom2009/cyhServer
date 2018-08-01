@@ -437,9 +437,9 @@ app.get('/watchincar/:id/:timestart/:timeend', (req, res) => {
             // all watch in 1record
             for(let j=0;j<data[i].watch.length;j++) {
                 // _1watch
-                if(pos = GetPosIsHaveThisWatch(cyhWatch_addr, data[i].watch[j].mac_address) != -1) {
+                if(GetPosIsHaveThisWatch(cyhWatch_addr, data[i].watch[j].mac_address) != -1) {
                     // make self to pos found
-                    _1record[pos] = data[i].watch[j]
+                    _1record[GetPosIsHaveThisWatch(cyhWatch_addr, data[i].watch[j].mac_address)] = data[i].watch[j]
                 }
             } 
             Data.push(_1record)

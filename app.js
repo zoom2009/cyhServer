@@ -449,7 +449,7 @@ app.get('/watchincar/:id/:timestart/:timeend', (req, res) => {
             _1w.watch = _1record
             _1w.date = data[i].date
             _1w.timesec = data[i].time
-            let convertedTime = secConverter(data[i].time, "sec")
+            let convertedTime = secConverter(parseInt(data[i].time), "sec")
         // { days: 406, hours: 13, minutes: 40, seconds: 58 }
             _1w.time = convertedTime.hours
             Data.push(_1w)

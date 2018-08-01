@@ -9,6 +9,11 @@ var app = express()
 var server = http.Server(app)
 var port = process.env.PORT || 3000
 var websocket = socketio(server);
+
+const secConverter = require("seconds-converter")
+
+
+
 server.listen(port, () => {
     console.log('is listening on port', port)
 })
@@ -443,7 +448,10 @@ app.get('/watchincar/:id/:timestart/:timeend', (req, res) => {
             } 
             _1w.watch = _1record
             _1w.date = data[i].date
-            _1w.time = data[i].time
+            _1w.timesec = data[i].time
+            let convertedTime = secConverter(data[i].time, "sec")
+        // { days: 406, hours: 13, minutes: 40, seconds: 58 }
+            _1w.time = convertedTime.hours
             Data.push(_1w)
             
         }

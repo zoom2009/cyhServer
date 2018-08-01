@@ -233,6 +233,8 @@ app.get('/watch/:id', (req, res) => {
 app.get('/watch/:id/getlast', (req, res) => {
     Watch.find({
         id: req.params.id
+    }).sort({
+        time: 1
     }).then((data) => {
         res.send(data[data.length-1])
     }, (e) => {
@@ -249,6 +251,8 @@ app.get('/watch/:id/:timestart/:timeend', (req, res) => {
     Watch.find({
         id: req.params.id,
         time: { $gte: timeStart, $lte: timeEnd }
+    }).sort({
+        time: 1
     }).then((data) => {
         res.send(data)
     }, (e) => {
@@ -263,6 +267,8 @@ app.get('/watch/:id/:date', (req, res) => {
     Watch.find({
         date: y,
         id: req.params.id
+    }).sort({
+        time: 1
     }).then((data) => {
         res.send(data)
     }, (e) => {
@@ -285,6 +291,8 @@ app.get('/watch/:id/:date/:timestart/:timeend', (req, res) => {
         date: y,
         id: req.params.id,
         time: { $gte: timeStart, $lte: timeEnd },
+    }).sort({
+        time: 1
     }).then((data) => {
         res.send(data)
     }, (e) => {
@@ -315,6 +323,8 @@ app.get('/car/:id', (req, res) => {
 app.get('/car/:id/getlast', (req, res) => {
     Car.find({
         id: req.params.id
+    }).sort({
+        time: 1
     }).then((data) => {
         res.send(data[data.length-1])
     }, (e) => {
@@ -345,6 +355,8 @@ app.get('/car/:id/:date', (req, res) => {
     Car.find({
         date: y,
         id: req.params.id
+    }).sort({
+        time: 1
     }).then((data) => {
         res.send(data)
     }, (e) => {
@@ -362,6 +374,8 @@ app.get('/car/:id/:date/:timestart/:timeend', (req, res) => {
         date: y,
         id: req.params.id,
         time: { $gte: timeStart, $lte: timeEnd },
+    }).sort({
+        time: 1
     }).then((data) => {
         res.send(data)
     }, (e) => {

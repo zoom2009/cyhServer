@@ -435,7 +435,7 @@ app.get('/watchincar/:id/:timestart/:timeend', (req, res) => {
             let _1w = {}
             // default for watch in 1 record
             for(let i=0;i<cyhWatch_addr.length;i++) {
-                _1record.push({mac_address: 'none', rssi: 'none'})
+                _1record.push('none')
             }
             for(let j=0;j<data[i].watch.length;j++) {
                 // _1watch

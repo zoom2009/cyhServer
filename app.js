@@ -451,7 +451,23 @@ app.get('/watchincar/:id/:timestart/:timeend', (req, res) => {
             let hr = data[i].time/3600
             let mn = (data[i].time - (Math.trunc(data[i].time/3600)*3600)) / 60
             let sec = data[i].time % 60
-            _1w.time = Math.trunc(hr) + ':' + Math.trunc(mn) + ':' + sec
+            let h,m,s
+            if(Math.trunc(hr)<10) {
+                h = '0' + Math.trunc(hr)
+            }else {
+                h = Math.trunc(hr)
+            }
+            if(Math.trunc(mn)<10) {
+                m = '0' + Math.trunc(mn)
+            }else {
+                m = Math.trunc(mn)
+            }
+            if(Math.trunc(sec)<10) {
+                s = '0' + Math.trunc(sec)
+            }else {
+                s = Math.trunc(sec)
+            }
+            _1w.time = h + ':' + m + ':' + s
             Data.push(_1w)
             
         }

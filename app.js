@@ -341,7 +341,8 @@ app.get('/car/:id/:timestart/:timeend', (req, res) => {
         time: { $gte: timeStart, $lte: timeEnd },
     }).sort({
         time: 1
-    }).then((data) => {
+    }).select('watch date time')
+    .then((data) => {
         res.send(data)
     }, (e) => {
         res.status(400).send(e)

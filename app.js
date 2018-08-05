@@ -153,6 +153,28 @@ app.post('/pushtoken', (req, res) => {
     })
 })
 
+app.post('/poptoken', (req, res) => {
+    let token = req.body.token
+    let mac_address = req.body.mac_address
+    User.find({mac_address}).then((user) => {
+        for(let i=0;i<user[0].expoNotiToken.length;i++) {
+            if(user[0].expoNotiToken[i] == token) {
+                for(let j=i;j<user[0].expoNotiToken.length-1;j++) {
+                    user[0].expoNotiToken[j] = useer[0].expoNotiToken[j+1]
+                }
+                user[0].expoNotiToken.pop()
+                user[0].save().then((doc) => {
+                    res.send('is pop token:', doc)
+                }, (e) => {
+                    res.status(400).send(3)
+                })
+                break;
+            }
+        }
+        res.status(400).send('not found this token')
+    })
+})
+
 app.get('/user/:id/:password', (req, res) => {
     User.find({
         id: req.params.id,

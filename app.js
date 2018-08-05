@@ -165,6 +165,9 @@ app.post('/poptoken', (req, res) => {
         }
         if(c==user[0].expoNotiToken.length) {
             res.status(400).send('not found this token')
+            return
+        }else {
+            res.send('is pop token:', token)
         }
         for(let i=0;i<user[0].expoNotiToken.length;i++) {
             if(user[0].expoNotiToken[i] == token) {
@@ -173,7 +176,6 @@ app.post('/poptoken', (req, res) => {
                 }
                 user[0].expoNotiToken.pop()
                 user[0].save()
-                res.send('is pop token:', token)
             }
         }
     })

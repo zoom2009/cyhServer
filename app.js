@@ -201,7 +201,7 @@ app.get('/', (req, res) => {
     res.send('Server is created...')
 })
 
-app.get('/remove/:model', (req, res) => {
+app.post('/remove/:model', (req, res) => {
     switch(req.params.model) {
         case 'car':
             Car.remove().then((d) => {res.send(d)}, (e) => {res.status(400).send(e)})

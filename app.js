@@ -174,10 +174,10 @@ app.post('/poptoken', (req, res) => {
                 user[0].expoNotiToken.pop()
                 user[0].save().then((doc) => {
                     res.send('is pop token:', doc)
-                    break;
+                    //return
                 }, (e) => {
                     res.status(400).send(e)
-                    break;
+                    //return
                 })
             }
         }

@@ -125,13 +125,25 @@ app.post('/signup', (req, res) => {
         phone_number: req.body.phone_number,
         homeLocation: req.body.homeLocation,
         schoolLocation: req.body.schoolLocation,
-        expoNotiToken: req.body.expoNotiToken,
         imgUrl: req.body.imgUrl
     })
     newUser.save().then((doc) => {
         res.send(doc)
     }, (e) => {
         res.status(400).send(e)
+    })
+})
+
+app.post('/pushtoken', (req, res) => {
+    let token = req.body.token
+    let mac_address = req.body.mac_address
+    User.find({mac_address}).then((user) => {
+        user[0].expoNotiToken.push(token)
+        user[0].save().then((doc) => {
+            res.send(doc)
+        }, (e) => {
+            res.status(400).send(e)
+        })
     })
 })
 

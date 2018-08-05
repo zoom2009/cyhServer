@@ -171,7 +171,6 @@ app.post('/poptoken', (req, res) => {
                 break;
             }
         }
-        res.status(400).send('not found this token')
     })
 })
 

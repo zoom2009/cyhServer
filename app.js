@@ -160,7 +160,7 @@ app.post('/poptoken', (req, res) => {
         for(let i=0;i<user[0].expoNotiToken.length;i++) {
             if(user[0].expoNotiToken[i] == token) {
                 for(let j=i;j<user[0].expoNotiToken.length-1;j++) {
-                    user[0].expoNotiToken[j] = useer[0].expoNotiToken[j+1]
+                    user[0].expoNotiToken[j] = user[0].expoNotiToken[j+1]
                 }
                 user[0].expoNotiToken.pop()
                 user[0].save().then((doc) => {

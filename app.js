@@ -181,6 +181,16 @@ app.post('/poptoken', (req, res) => {
     })
 })
 
+app.get('/gettoken/:id', (req, res) => {
+    User.find({
+        id: req.params.id
+    }).select('expoNotiToken').then((doc) => {
+        res.send(doc)
+    }, (e) => {
+        res.status(400).send(e)
+    })
+})
+
 app.get('/user/:id/:password', (req, res) => {
     User.find({
         id: req.params.id,

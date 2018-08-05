@@ -138,6 +138,12 @@ app.post('/pushtoken', (req, res) => {
     let token = req.body.token
     let mac_address = req.body.mac_address
     User.find({mac_address}).then((user) => {
+        for(let i=0;i<user[0].expoNotiToken.length;i++) {
+            if(user[0].expoNotiToken[i] == token) {
+                res.send(400).send('already have this token')
+                break;
+            }
+        }
         user[0].expoNotiToken.push(token)
         user[0].save().then((doc) => {
             res.send(doc)

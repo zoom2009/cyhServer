@@ -44,7 +44,7 @@ var UserSchema = new Schema({
             required: true,
         }
     },
-    expoNotiToken: [{type: String, unique: true}],
+    expoNotiToken: [{type: String}],
     imgUrl: String
 })
 

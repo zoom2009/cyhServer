@@ -157,6 +157,15 @@ app.post('/poptoken', (req, res) => {
     let token = req.body.token
     let mac_address = req.body.mac_address
     User.find({mac_address}).then((user) => {
+        let c = 0
+        for(let i=0;i<user[0].expoNotiToken.length;i++) {
+            if(user[0].expoNotiToken[i] != token) {
+                c++
+            }
+        }
+        if(c==user[0].expoNotiToken.length) {
+            res.status(400).send('not found this token')
+        }
         for(let i=0;i<user[0].expoNotiToken.length;i++) {
             if(user[0].expoNotiToken[i] == token) {
                 for(let j=i;j<user[0].expoNotiToken.length-1;j++) {

@@ -43,7 +43,9 @@ var UserSchema = new Schema({
             type: Number, 
             required: true,
         }
-    }
+    },
+    expoNotiToken: String,
+    imgUrl: String
 })
 
 var User = mongoose.model('User', UserSchema)

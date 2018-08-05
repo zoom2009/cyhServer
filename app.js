@@ -125,6 +125,8 @@ app.post('/signup', (req, res) => {
         phone_number: req.body.phone_number,
         homeLocation: req.body.homeLocation,
         schoolLocation: req.body.schoolLocation,
+        expoNotiToken: req.body.expoNotiToken,
+        imgUrl: req.body.imgUrl
     })
     newUser.save().then((doc) => {
         res.send(doc)

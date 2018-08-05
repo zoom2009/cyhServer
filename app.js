@@ -175,7 +175,7 @@ app.post('/poptoken', (req, res) => {
                 user[0].save().then((doc) => {
                     res.send('is pop token:', doc)
                 }, (e) => {
-                    res.status(400).send(3)
+                    res.status(400).send(e)
                 })
                 break;
             }

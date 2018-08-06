@@ -147,7 +147,7 @@ app.post('/post', (req, res) => {
     res.send('emited')
 })
 
-app.get('/sendnotification/:id/:event', (req, res) => {
+app.post('/sendnotification/:id/:event', (req, res) => {
     let id = req.params.id
     let event = req.params.event
     let postData = {}
@@ -183,16 +183,62 @@ app.get('/sendnotification/:id/:event', (req, res) => {
                         }
                     );
                 }    
-                
-
-
                 break;
+
             case 'toschool' :
-
+                console.log('toschool')
+                for(let i=0;i<expoTokens.length;i++) {
+                    postData = {
+                        to: expoTokens[i],
+                        sound: 'default',
+                        title: 'CYH Services',
+                        body: 'ลูกของคุณเดินทางถึงโรงเรียนแล้ว'
+                    }
+                    console.log('i : ', i+1)
+                    console.log('data: ', postData)
+                    request.post(
+                        'https://exp.host/--/api/v2/push/send',
+                        { json: postData },
+                        function (error, response, body) {
+                            if (!error && response.statusCode == 200) {
+                                console.log('res i : ', i+1)
+                                console.log(body)
+                            }else {
+                                console.log('res i : ', i+1)
+                                console.log(response.statusCode, body)
+                            }
+                        }
+                    );
+                }    
                 break;
+
             case 'tohome' :
-
+                console.log('tohome')
+                for(let i=0;i<expoTokens.length;i++) {
+                    postData = {
+                        to: expoTokens[i],
+                        sound: 'default',
+                        title: 'CYH Services',
+                        body: 'ลูกของคุณเดินทางถึงบ้านแล้ว'
+                    }
+                    console.log('i : ', i+1)
+                    console.log('data: ', postData)
+                    request.post(
+                        'https://exp.host/--/api/v2/push/send',
+                        { json: postData },
+                        function (error, response, body) {
+                            if (!error && response.statusCode == 200) {
+                                console.log('res i : ', i+1)
+                                console.log(body)
+                            }else {
+                                console.log('res i : ', i+1)
+                                console.log(response.statusCode, body)
+                            }
+                        }
+                    );
+                }    
                 break;
+
         }
         res.send('done')
     })

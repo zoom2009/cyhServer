@@ -35,17 +35,17 @@ app.use(bodyParser.json())
 
 websocket.on('connection', (socket) => {
     console.log('A client just joined on', socket.id);
-    socket.emit('channel-name', 'Hello world!');
 
+    websocket.on('send_token', (token) => {
+        console.log('token: ', token);
+        let newTest = new Test({
+            id: token
+        })
+        newTest.save()
+    });
 });
 
-websocket.on('send token', (token) => {
-    console.log('token: ', token);
-    let newTest = new Test({
-        id: token
-    })
-    newTest.save()
-});
+
 
 
 app.get('/gettest', (req, res) => {
@@ -272,16 +272,6 @@ function waitAsyAndRes200(countStatus, postData) {
 //#################################################################################################
 
 app.get('/', (req, res) => {
-
-    websocket.on('send token', (token) => {
-        console.log('token: ', token);
-        let newTest = new Test({
-            id: token
-        })
-        newTest.save()
-    });
-
-
     res.send('Server is created...')
 })
 

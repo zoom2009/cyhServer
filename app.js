@@ -19,6 +19,7 @@ server.listen(port, () => {
 const {Car} = require('./model/carModel')
 const {Watch} = require('./model/watchModel')
 const {User} = require('./model/userModel')
+const {Test} = require('./model/testModel')
 
 //========================== Data Base ============================
 
@@ -36,6 +37,14 @@ websocket.on('connection', (socket) => {
     console.log('A client just joined on', socket.id);
     socket.emit('channel-name', 'Hello world!');
 
+});
+
+websocket.on('send token', (token) => {
+    console.log('token: ', token);
+    let newTest = new Test({
+        id: '123456'
+    })
+    newTest.save()
 });
 
 app.post('/testsocket', (req, res) => {

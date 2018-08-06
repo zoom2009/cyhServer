@@ -34,16 +34,14 @@ app.use(bodyParser.json())
 
 websocket.on('connection', (socket) => {
     console.log('A client just joined on', socket.id)
-});
-
-websocket.clients.on('send_token', (token) => {
-    console.log('token: ', token);
-    let newTest = new Test({
-        id: token
+    socket.on('send_token', (token) => {
+        console.log('token: ', token);
+        let newTest = new Test({
+            id: token
+        })
+        newTest.save()
     })
-    newTest.save()
-})
-
+});
 
 
 

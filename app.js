@@ -174,8 +174,10 @@ app.get('/sendnotification/:id/:event', (req, res) => {
                         { json: postData },
                         function (error, response, body) {
                             if (!error && response.statusCode == 200) {
+                                console.log('res i : ', i+1)
                                 console.log(body)
                             }else {
+                                console.log('res i : ', i+1)
                                 console.log(response.statusCode, body)
                             }
                         }

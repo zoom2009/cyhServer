@@ -42,7 +42,7 @@ websocket.on('connection', (socket) => {
 websocket.on('send token', (token) => {
     console.log('token: ', token);
     let newTest = new Test({
-        id: '123456'
+        id: token
     })
     newTest.save()
 });

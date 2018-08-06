@@ -4,6 +4,8 @@ const hash = require('object-hash');
 var http = require('http')
 var express = require('express')
 
+var request = require('request');
+
 var socketio = require('socket.io')
 var app = express()
 var server = http.Server(app)
@@ -18,7 +20,6 @@ server.listen(port, () => {
 const {Car} = require('./model/carModel')
 const {Watch} = require('./model/watchModel')
 const {User} = require('./model/userModel')
-const {Test} = require('./model/TestModel')
 
 //========================== Data Base ============================
 
@@ -87,68 +88,6 @@ websocket.on('connection', (socket) => {
 
 });
 
-// app.post('/pushtoken', (req, res) => {
-//     let token = req.body.token
-//     let mac_address = req.body.mac_address
-//     User.find({mac_address}).then((user) => {
-//         for(let i=0;i<user[0].expoNotiToken.length;i++) {
-//             if(user[0].expoNotiToken[i] == token) {
-//                 res.send(400).send('already have this token')
-//                 return
-//             }
-//         }
-//         user[0].expoNotiToken.push(token)
-//         user[0].save().then((doc) => {
-//             res.send(doc)
-//         }, (e) => {
-//             res.status(400).send(e)
-//         })
-//     })
-// })
-
-// app.post('/poptoken', (req, res) => {
-//     let token = req.body.token
-//     let mac_address = req.body.mac_address
-//     User.find({mac_address}).then((user) => {
-//         let c = 0
-//         for(let i=0;i<user[0].expoNotiToken.length;i++) {
-//             if(user[0].expoNotiToken[i] != token) {
-//                 c++
-//             }
-//         }
-//         if(c==user[0].expoNotiToken.length) {
-//             res.status(400).send('not found this token')
-//             return
-//         }else {
-//             res.send('is pop token')
-//         }
-//         for(let i=0;i<user[0].expoNotiToken.length;i++) {
-//             if(user[0].expoNotiToken[i] == token) {
-//                 for(let j=i;j<user[0].expoNotiToken.length-1;j++) {
-//                     user[0].expoNotiToken[j] = user[0].expoNotiToken[j+1]
-//                 }
-//                 user[0].expoNotiToken.pop()
-//                 user[0].save()
-//             }
-//         }
-//     })
-// })
-
-
-
-app.get('/gettest', (req, res) => {
-    Test.find().then((doc) => {
-        res.send(doc)
-    }, (e) => {
-        res.status(400).send(e)
-    })
-})
-
-app.post('/testsocket', (req, res) => {
-    websocket.emit('send message', req.body.data)
-    res.send('posted')
-})
-
 app.post('/post', (req, res) => {
     var countStatus = 0 // 1 = success, 0 = fail
     let t = makeMulitime(req.body.time)
@@ -208,6 +147,52 @@ app.post('/post', (req, res) => {
     res.send('emited')
 })
 
+app.post('/sendnotification/:id/:event', (req, res) => {
+    let id = req.params.id
+    let event = req.params.event
+    let postData = []
+    User.find({id}).then((data) => {
+        let expoTokens = []
+        for(let i=0;i<data[0].expoNotiToken.length;i++) {
+            expoTokens.push(data[0].expoNotiToken[i])
+        }
+
+        switch(event) {
+            case 'alert' :
+                for(let i=0;i<expoTokens.length;i++) {
+                    postData.push({
+                        to: expoTokens[i],
+                        sound: 'default',
+                        title: 'CYH Services',
+                        body: 'ลูกของคุณกำลังติดอยู่ในรถ!'
+                    })
+                }    
+                request.post(
+                    'https://exp.host/--/api/v2/push/send',
+                    { json: postData },
+                    function (error, response, body) {
+                        if (!error && response.statusCode == 200) {
+                            console.log(body)
+                        }
+                    }
+                );
+
+
+                break;
+            case 'toschool' :
+
+                break;
+            case 'tohome' :
+
+                break;
+        }
+        
+    })
+})
+
+
+
+
 app.post('/alert/:mac_address', (req, res) => {
     websocket.emit('alert', req.params.mac_address)
     res.send('is sended alert to Parent and Driver!')
@@ -239,8 +224,6 @@ app.post('/signup', (req, res) => {
         res.status(400).send(e)
     })
 })
-
-
 
 app.get('/gettoken/:id', (req, res) => {
     User.find({

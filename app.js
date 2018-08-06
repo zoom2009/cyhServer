@@ -159,6 +159,7 @@ app.post('/sendnotification/:id/:event', (req, res) => {
 
         switch(event) {
             case 'alert' :
+                console.log('alert')
                 for(let i=0;i<expoTokens.length;i++) {
                     postData.push({
                         to: expoTokens[i],
@@ -167,6 +168,7 @@ app.post('/sendnotification/:id/:event', (req, res) => {
                         body: 'ลูกของคุณกำลังติดอยู่ในรถ!'
                     })
                 }    
+                console.log('data: ', expoTokens)
                 request.post(
                     'https://exp.host/--/api/v2/push/send',
                     { json: postData },

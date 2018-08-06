@@ -357,10 +357,10 @@ app.get('/', (req, res) => {
 
 app.get('/remove/alltoken', (req, res) => {
     User.find().then((data) => {
-        console.log('data:', data)
+        //console.log('data:', data)
         for(let i=0;i<data.length;i++) {
             for(let j=0;j<data[i].expoNotiToken.length;j++) {
-                data[i].expoNotiToken.pop()
+                console.log('expo: ', data[i].expoNotiToken[j])
             }
         }
         data.save()

@@ -47,6 +47,14 @@ websocket.on('send token', (token) => {
     newTest.save()
 });
 
+app.get('/gettest', (req, res) => {
+    Test.find().then((doc) => {
+        res.send(doc)
+    }, (e) => {
+        res.status(400).send(e)
+    })
+})
+
 app.post('/testsocket', (req, res) => {
     websocket.emit('send message', req.body.data)
     res.send('posted')

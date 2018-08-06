@@ -11,7 +11,6 @@ var port = process.env.PORT || 3000
 var websocket = socketio(server);
 
 
-
 server.listen(port, () => {
     console.log('is listening on port', port)
 })
@@ -34,16 +33,16 @@ mongoose.connect(process.env.MONGODB_URI ||'mongodb://localhost/cyhDB')
 app.use(bodyParser.json())
 
 websocket.on('connection', (socket) => {
-    console.log('A client just joined on', socket.id);
-
-    websocket.on('send_token', (token) => {
-        console.log('token: ', token);
-        let newTest = new Test({
-            id: token
-        })
-        newTest.save()
-    });
+    console.log('A client just joined on', socket.id)
 });
+
+websocket.clients.on('send_token', (token) => {
+    console.log('token: ', token);
+    let newTest = new Test({
+        id: token
+    })
+    newTest.save()
+})
 
 
 

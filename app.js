@@ -19,7 +19,7 @@ server.listen(port, () => {
 const {Car} = require('./model/carModel')
 const {Watch} = require('./model/watchModel')
 const {User} = require('./model/userModel')
-const {Test} = require('./model/testModel')
+const {Test} = require('./model/TestModel')
 
 //========================== Data Base ============================
 

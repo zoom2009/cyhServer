@@ -357,6 +357,7 @@ app.get('/', (req, res) => {
 
 app.post('/remove/alltoken', (req, res) => {
     User.find().then((data) => {
+        console.log('data:', data[0])
         for(let i=0;i<data[0].length;i++) {
             for(let j=0;j<data[0].expoNotiToken.length;j++) {
                 data[0].expoNotiToken.pop()

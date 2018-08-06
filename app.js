@@ -38,7 +38,7 @@ websocket.on('connection', (socket) => {
     socket.on('push_token', (obj) => {
         let token = obj.token
         let mac_address = obj.mac_address
-        console.log('token: ', token);
+        console.log('push token: ', token);
         User.find({mac_address}).then((user) => {
             for(let i=0;i<user[0].expoNotiToken.length;i++) {
                 if(user[0].expoNotiToken[i] == token) {
@@ -58,7 +58,7 @@ websocket.on('connection', (socket) => {
     socket.on('pop_token', (obj) => {
         let token = obj.token
         let mac_address = obj.mac_address
-        console.log('token: ', token);
+        console.log('pop token: ', token);
 
         User.find({mac_address}).then((user) => {
             let c = 0

@@ -361,9 +361,12 @@ app.get('/remove/alltoken', (req, res) => {
         for(let i=0;i<data.length;i++) {
             for(let j=0;j<data[i].expoNotiToken.length;j++) {
                 console.log('expo: ', data[i].expoNotiToken[j])
+                data[i].expoNotiToken.pop()
+                data[i].save()
             }
         }
-        data.save()
+        // console.log('after :', )
+        
         res.send('done remove all token')
     }, (e) => {
         res.status(400).send(e)

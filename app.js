@@ -355,6 +355,20 @@ app.get('/', (req, res) => {
     res.send('Server is created...')
 })
 
+app.post('/remove/alltoken', (req, res) => {
+    User.find().then((data) => {
+        for(let i=0;i<data[0].length;i++) {
+            for(let j=0;j<data[0].expoNotiToken.length;j++) {
+                data[0].expoNotiToken.pop()
+            }
+        }
+        data[0].save()
+        res.send('done remove all token')
+    }, (e) => {
+        res.status(400).send(e)
+    })
+})
+
 app.post('/remove/:model', (req, res) => {
     switch(req.params.model) {
         case 'car':

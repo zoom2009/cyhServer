@@ -186,7 +186,7 @@ app.post('/sendnotification/:id/:event', (req, res) => {
 
                 break;
         }
-        
+        res.send('done')
     })
 })
 

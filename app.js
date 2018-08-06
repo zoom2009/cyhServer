@@ -358,12 +358,12 @@ app.get('/', (req, res) => {
 app.get('/remove/alltoken', (req, res) => {
     User.find().then((data) => {
         console.log('data:', data)
-        for(let i=0;i<data[0].length;i++) {
-            for(let j=0;j<data[0].expoNotiToken.length;j++) {
-                data[0].expoNotiToken.pop()
+        for(let i=0;i<data.length;i++) {
+            for(let j=0;j<data[i].expoNotiToken.length;j++) {
+                data[i].expoNotiToken.pop()
             }
         }
-        data[0].save()
+        data.save()
         res.send('done remove all token')
     }, (e) => {
         res.status(400).send(e)

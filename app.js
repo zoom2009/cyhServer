@@ -150,7 +150,7 @@ app.post('/post', (req, res) => {
 app.get('/sendnotification/:id/:event', (req, res) => {
     let id = req.params.id
     let event = req.params.event
-    let postData = []
+    let postData = {}
     User.find({id}).then((data) => {
         let expoTokens = []
         for(let i=0;i<data[0].expoNotiToken.length;i++) {
@@ -161,14 +161,14 @@ app.get('/sendnotification/:id/:event', (req, res) => {
             case 'alert' :
                 console.log('alert')
                 for(let i=0;i<expoTokens.length;i++) {
-                    postData.push({
+                    postData = {
                         to: expoTokens[i],
                         sound: 'default',
                         title: 'CYH Services',
                         body: 'ลูกของคุณกำลังติดอยู่ในรถ!'
-                    })
+                    }
                 }    
-                console.log('data: ', expoTokens)
+                console.log('data: ', postData)
                 request.post(
                     'https://exp.host/--/api/v2/push/send',
                     { json: postData },

@@ -355,7 +355,7 @@ app.get('/', (req, res) => {
     res.send('Server is created...')
 })
 
-app.post('/remove/alltoken', (req, res) => {
+app.get('/remove/alltoken', (req, res) => {
     User.find().then((data) => {
         console.log('data:', data[0])
         for(let i=0;i<data[0].length;i++) {

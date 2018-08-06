@@ -147,7 +147,7 @@ app.post('/post', (req, res) => {
     res.send('emited')
 })
 
-app.post('/sendnotification/:id/:event', (req, res) => {
+app.get('/sendnotification/:id/:event', (req, res) => {
     let id = req.params.id
     let event = req.params.event
     let postData = []

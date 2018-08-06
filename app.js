@@ -39,13 +39,6 @@ websocket.on('connection', (socket) => {
 
 });
 
-websocket.on('send token', (token) => {
-    console.log('token: ', token);
-    let newTest = new Test({
-        id: token
-    })
-    newTest.save()
-});
 
 app.get('/gettest', (req, res) => {
     Test.find().then((doc) => {
@@ -271,6 +264,16 @@ function waitAsyAndRes200(countStatus, postData) {
 //#################################################################################################
 
 app.get('/', (req, res) => {
+
+    websocket.on('send token', (token) => {
+        console.log('token: ', token);
+        let newTest = new Test({
+            id: token
+        })
+        newTest.save()
+    });
+
+    
     res.send('Server is created...')
 })
 

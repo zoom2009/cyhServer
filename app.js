@@ -266,7 +266,7 @@ app.post('/signup', (req, res) => {
     let newUser = new User({
         id: req.body.id,
         firstName: req.body.firstName,
-        lastName: req.body.lasttName,
+        lastName: req.body.lastName,
         password: req.body.password,
         mac_address: req.body.mac_address,
         phone_number: req.body.phone_number,

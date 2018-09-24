@@ -300,6 +300,14 @@ app.get('/user/:id/:password', (req, res) => {
     })
 })
 
+app.get('/dropusermodel', (req, res) => {
+    User.collection.drop().then(() => {
+        res.send('droped User model')
+    }, (err) => {
+        res.status(400).send(err)
+    })
+})
+
 app.get('/userbytoken/:token', (req, res) => {
     User.find({
         expoNotiToken: req.params.token

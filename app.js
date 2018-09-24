@@ -383,6 +383,14 @@ app.get('/remove/alltoken', (req, res) => {
     })
 })
 
+app.get('/removealluser', (req, res) => {
+    User.remove().then((doc) => {
+        res.send('is removed : '+ doc)
+    }, (err) => {
+        res.status(400).send(err)
+    })
+})
+
 app.post('/remove/:model', (req, res) => {
     switch(req.params.model) {
         case 'car':

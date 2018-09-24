@@ -45,7 +45,6 @@ var UserSchema = new Schema({
         }
     },
     expoNotiToken: [{type: String}],
-    imgUrl: String
 })
 
 var User = mongoose.model('User', UserSchema)

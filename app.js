@@ -265,12 +265,14 @@ app.post('/finishtohome/:mac_address', (req, res) => {
 app.post('/signup', (req, res) => {
     let newUser = new User({
         id: req.body.id,
+        firstName: req.body.firstName,
+        lastName: req.body.lasttName,
         password: req.body.password,
         mac_address: req.body.mac_address,
         phone_number: req.body.phone_number,
         homeLocation: req.body.homeLocation,
         schoolLocation: req.body.schoolLocation,
-        imgUrl: req.body.imgUrl
+        picUrl: req.body.picUrl
     })
     newUser.save().then((doc) => {
         res.send(doc)

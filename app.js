@@ -272,7 +272,7 @@ app.post('/signup', (req, res) => {
         phone_number: req.body.phone_number,
         homeLocation: req.body.homeLocation,
         schoolLocation: req.body.schoolLocation,
-        picUrl: req.body.picUrl
+        picURL: req.body.picURL
     })
     newUser.save().then((doc) => {
         res.send(doc)

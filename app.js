@@ -20,6 +20,7 @@ server.listen(port, () => {
 const {Car} = require('./model/carModel')
 const {Watch} = require('./model/watchModel')
 const {User} = require('./model/userModel')
+const {CarData} = require('./model/carDataModel')
 
 //========================== Data Base ============================
 
@@ -87,6 +88,27 @@ websocket.on('connection', (socket) => {
     })
 
 });
+
+app.get('/getbandincar', (req, res) => {
+    CarData.find().select('watch').then((doc) => {
+        res.send(doc)
+    }, (err) => {
+        res.status(400).send(err)
+    })
+})
+
+app.post('/postcardata', (req, res) => {
+    let newCarData = new CarData({
+        watch: req.body.watch,
+        tabian: req.body.tabian
+    })
+
+    newCarData.save().then((doc) => {
+        res.send(doc)
+    }, (err) => {
+        res.status(400).send(err)
+    })
+})
 
 app.post('/post', (req, res) => {
     var countStatus = 0 // 1 = success, 0 = fail

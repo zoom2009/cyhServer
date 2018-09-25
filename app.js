@@ -100,7 +100,7 @@ app.get('/getbandincar', (req, res) => {
 app.post('/postcardata', (req, res) => {
     let newCarData = new CarData({
         watch: req.body.watch,
-        tabian: req.body.tabian
+        tabain: req.body.tabain
     })
 
     newCarData.save().then((doc) => {

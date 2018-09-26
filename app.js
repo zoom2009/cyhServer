@@ -304,7 +304,8 @@ app.post('/signup', (req, res) => {
         phone_number: req.body.phone_number,
         homeLocation: req.body.homeLocation,
         schoolLocation: req.body.schoolLocation,
-        picURL: req.body.picURL
+        picURL: req.body.picURL,
+        carTabain: req.body.carTabain
     })
     newUser.save().then((doc) => {
         res.send(doc)

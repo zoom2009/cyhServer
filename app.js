@@ -179,11 +179,11 @@ app.post('/post', (req, res) => {
     res.send('emited')
 })
 
-app.post('/sendnotification/:id/:event', (req, res) => {
+app.post('/sendnotification/:mac_address/:event', (req, res) => {
     let id = req.params.id
     let event = req.params.event
     let postData = {}
-    User.find({id}).then((data) => {
+    User.find({mac_address}).then((data) => {
         let expoTokens = []
         for(let i=0;i<data[0].expoNotiToken.length;i++) {
             expoTokens.push(data[0].expoNotiToken[i])

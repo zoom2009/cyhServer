@@ -89,8 +89,10 @@ websocket.on('connection', (socket) => {
 
 });
 
-app.get('/getbandincar', (req, res) => {
-    CarData.find().select('watch').then((doc) => {
+app.get('/getbandincar/:tabain', (req, res) => {
+    CarData.find({
+        tabain: req.params.tabain
+    }).select('watch').then((doc) => {
         res.send(doc)
     }, (err) => {
         res.status(400).send(err)

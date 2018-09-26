@@ -97,6 +97,14 @@ app.get('/getbandincar', (req, res) => {
     })
 })
 
+app.get('/removecardata', (req, res) => {
+    CarData.collection.drop().then(() => {
+        res.send('droped CarData model')
+    }, (err) => {
+        res.status(400).send(err)
+    })
+})
+
 app.post('/postcardata', (req, res) => {
     let newCarData = new CarData({
         watch: req.body.watch,

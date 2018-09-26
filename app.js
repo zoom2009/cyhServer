@@ -347,7 +347,11 @@ app.get('/userbytoken/:token', (req, res) => {
     User.find({
         expoNotiToken: req.params.token
     }).then((doc) => {
-        res.send(doc[0])
+        if(doc.length==0) {
+            res.status(400).send(e)
+        }else {
+            res.send(doc[0])
+        }
     }, (e) => {
         res.status(400).send(e)
     })

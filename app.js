@@ -405,6 +405,16 @@ app.get('/', (req, res) => {
     res.send('Server is created...')
 })
 
+app.get('/getalluser-location-incar/:carid', (req, res) => {
+    User.find({
+        carTabain: req.body.carTabain
+    }).select('homeLocation schoolLocation').then((doc) => {
+        res.send(doc[0])
+    }, (err) => {
+        res.status(400).send(err)
+    })
+})
+
 app.get('/remove/alltoken', (req, res) => {
     User.find().then((data) => {
         //console.log('data:', data)

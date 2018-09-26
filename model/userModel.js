@@ -44,6 +44,10 @@ var UserSchema = new Schema({
             required: true,
         }
     },
+    carTabain: {
+        type: String,
+        required: true
+    },
     expoNotiToken: [{type: String}],
 })
 

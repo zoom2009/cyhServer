@@ -93,7 +93,7 @@ app.get('/getbandincar/:tabain', (req, res) => {
     CarData.find({
         tabain: req.params.tabain
     }).select('watch').then((doc) => {
-        res.send(doc)
+        res.send(doc[0])
     }, (err) => {
         res.status(400).send(err)
     })

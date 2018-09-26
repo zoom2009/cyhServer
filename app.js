@@ -410,7 +410,7 @@ app.get('/', (req, res) => {
 app.get('/getalluser-location-incar/:carid', (req, res) => {
     User.find({
         carTabain: req.body.carTabain
-    }).select('homeLocation schoolLocation').then((doc) => {
+    }).then((doc) => {
         res.send(doc[0])
     }, (err) => {
         res.status(400).send(err)

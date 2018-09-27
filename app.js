@@ -343,9 +343,9 @@ app.get('/dropusermodel', (req, res) => {
     })
 })
 
-app.get('/userbytoken/:token', (req, res) => {
+app.get('/userbyid/:id', (req, res) => {
     User.find({
-        expoNotiToken: req.params.token
+        id : req.params.id
     }).then((doc) => {
         res.send(doc[0])
     }, (e) => {

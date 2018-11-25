@@ -325,13 +325,14 @@ app.get('/gettoken/:id', (req, res) => {
 })
 
 app.get('/user/:id/:password', (req, res) => {
-    User.find({
+    User.findOne({
         id: req.params.id,
         password: req.params.password
     }).then((doc) => {
-        res.send(doc)
+        if(!doc) return res.status(400).json({succes: false, message: 'Username หรือ Password ไม่ถูกต้อง'})
+        res.json({succes: true, result: doc, message: 'เข้าสู่ระบบสำเร็จ'})
     }, (e) => {
-        res.status(400).send(e)
+        res.status(400).json({succes: false, message: e})
     })
 })
 

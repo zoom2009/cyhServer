@@ -6,6 +6,7 @@ var express = require('express')
 
 var request = require('request');
 var moment = require('moment');
+require('moment/locale/th')
 
 var socketio = require('socket.io')
 var app = express()
@@ -124,8 +125,8 @@ app.post('/postcardata', (req, res) => {
 //do here 2018 ***
 //get data
 app.get('/get-current-watch/:macAddr', (req, res) => {
-    moment.locale('th'); 
-    let timeString = moment().format('h:mm:ss')
+    moment.locale('th')
+    let timeString = moment().format('LTS');
     CurrentWatch.findOne({mac_address: req.params.macAddr}).then((d) => {
         if(!d) return res.status(400).send('not found')
         res.send({d, time: timeString})

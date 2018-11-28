@@ -122,8 +122,9 @@ app.post('/postcardata', (req, res) => {
 })
 //do here 2018 ***
 //get data
-app.get('/get-data-watch', (req, res) => {
-    Car.find().then((d) => {
+app.get('/get-current-watch/:macAddr', (req, res) => {
+    CurrentWatch.findOne({mac_address: req.params.macAddr}).then((d) => {
+        if(!d) return res.status(400).send('not found')
         res.send(d)
     }, (e) => {
         res.status(400).send(e)

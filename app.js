@@ -135,9 +135,19 @@ function getCurrentTimeSec() {
 //do here 2018 ***
 //get data
 app.get('/get-current-watch/:macAddr', (req, res) => {
-    CurrentWatch.findOne({mac_address: req.params.macAddr}).then((d) => {
-        if(!d) return res.status(400).send('not found')
-        res.send({d, time: getCurrentTimeSec()})
+    let overTime = 15*60
+    let curTime = getCurrentTimeSec()
+    CurrentWatch.findOne({mac_address: req.params.macAddr}).then((data) => {
+        if(!data) return res.status(400).send('not found')
+        let status
+        if(curTime-data.time >= overTime) {
+            console.log('is Timeout')
+            status = false
+        }else {
+            console.log('still in time')
+            status = true
+        }
+        res.send({data, lastTime: data.time, currentTime: curTime, status})
     }, (e) => {
         res.status(400).send(e)
     })

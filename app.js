@@ -122,14 +122,23 @@ app.post('/postcardata', (req, res) => {
         res.status(400).send(err)
     })
 })
+
+function getCurrentTimeSec() {
+    let today = new Date()
+    let h = +today.getHours()
+    let m = +today.getMinutes()
+    let s = +today.getSeconds()
+    let curTime =((h*60*60)+(m*60)+s)
+    console.log('current Time sec is '+ curTime)
+    return ''+curTime
+}
 //do here 2018 ***
 //get data
 app.get('/get-current-watch/:macAddr', (req, res) => {
-    moment.locale('th')
-    let timeString = moment().utc().format('h:mm:ss a');
+
     CurrentWatch.findOne({mac_address: req.params.macAddr}).then((d) => {
         if(!d) return res.status(400).send('not found')
-        res.send({d, time: timeString})
+        res.send({d, time: getCurrentTimeSec()})
     }, (e) => {
         res.status(400).send(e)
     })

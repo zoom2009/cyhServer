@@ -6,7 +6,7 @@ var express = require('express')
 
 var request = require('request');
 var moment = require('moment');
-require('moment/locale/th')
+require('moment/locale/th.js')
 
 var socketio = require('socket.io')
 var app = express()

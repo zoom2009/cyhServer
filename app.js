@@ -119,7 +119,17 @@ app.post('/postcardata', (req, res) => {
         res.status(400).send(err)
     })
 })
+//do here 2018
+//get data
+app.get('/get-data-watch', (req, res) => {
+    Car.find().then((d) => {
+        res.send(d)
+    }, (e) => {
+        res.status(400).send(e)
+    })
+})
 
+//Main
 app.post('/post', (req, res) => {
     var countStatus = 0 // 1 = success, 0 = fail
     let t = makeMulitime(req.body.time)

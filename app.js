@@ -134,7 +134,7 @@ function getCurrentTimeSec() {
 }
 //do here 2018 ***
 //get data
-app.get('get-all-user', (req, res) => {
+app.get('/get-all-user', (req, res) => {
     User.find().then((d) => {
         res.send(d)
     }, (e) => {

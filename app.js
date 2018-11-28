@@ -134,6 +134,14 @@ function getCurrentTimeSec() {
 }
 //do here 2018 ***
 //get data
+app.get('/get-current-watch-all', (req, res) => {
+    CurrentWatch.find().then((d) => {
+        res.send(d)
+    }, (e) => {
+        res.status(400).send(e)
+    })
+})
+
 app.get('/get-current-watch/:macAddr', (req, res) => {
     let overTime = 3*60
     let curTime = getCurrentTimeSec()

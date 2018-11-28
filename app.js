@@ -21,6 +21,7 @@ const {Car} = require('./model/carModel')
 const {Watch} = require('./model/watchModel')
 const {User} = require('./model/userModel')
 const {CarData} = require('./model/carDataModel')
+const {CurrentWatch} = require('./model/currentWatch')
 
 //========================== Data Base ============================
 
@@ -119,7 +120,7 @@ app.post('/postcardata', (req, res) => {
         res.status(400).send(err)
     })
 })
-//do here 2018
+//do here 2018 ***
 //get data
 app.get('/get-data-watch', (req, res) => {
     Car.find().then((d) => {
@@ -160,31 +161,63 @@ app.post('/post', (req, res) => {
     })
     
     for(let i=0;i<postData.watch.length;i++) {
-        let watchData = {
-            id: postData.watch[i].mac_address,
-            carID: postData.id,
-            date: postData.date,
-            time: postData.time,
-            lat: postData.lat,
-            lng: postData.lng,
-            temp: postData.temp,
-            hum: postData.hum
-        }
-        let newWatch = new Watch(watchData)
-        newWatch.save().then((doc) => {
-            countStatus++
-            console.log('+++')
-            if(i===postData.watch.length-1) {
-               // if(waitAsyAndRes200(countStatus, postData)) {
-                //    websocket.emit('carPost', postData)
-                //    res.send('is Saved')
-               // }
+        if(postData.watch[i].name == 'MI Band 2') {   
+            let watchData = {
+                id: postData.watch[i].mac_address,
+                carID: postData.id,
+                date: postData.date,
+                time: postData.time,
+                lat: postData.lat,
+                lng: postData.lng,
+                temp: postData.temp,
+                hum: postData.hum
             }
-        }, (e) => {
-            countStatus = 0 
-            res.status(400).send(e)
-            return
-        })
+            
+            //find by macAddr if already have go update if not create new one
+            CurrentWatch.findOne({mac_address: postData.watch[i].mac_address}).then(async(w) => {
+                if(w) { // already have
+                    //update
+                    w.lat = postData.lat
+                    w.lng = postData.lng
+                    w.rssi = postData.watch[i].rssi
+                    w.date = postData.date
+                    w.time = postData.time
+                    w.temp = postData.temp
+                    let res = await w.save()
+                    console.log('res update currentWatch is ', res)
+                }else { // dont have
+                    let newCurrentWatch = new CurrentWatch({
+                        mac_address: postData.watch[i].mac_address,
+                        lat: postData.lat,
+                        lng: postData.lng,
+                        temp: postData.temp,
+                        rssi: postData.watch[i].rssi,
+                        date: postData.date,
+                        time: postData.time
+                    })
+                    let res = await newCurrentWatch.save()
+                    console.log('res save new CurrentWatch is ', res)
+                }
+            }, (e) => {
+                console.log('error find watch : ', e)
+            })
+
+            // let newWatch = new Watch(watchData)
+            // newWatch.save().then((doc) => {
+            //     countStatus++
+            //     console.log('+++')
+            //     if(i===postData.watch.length-1) {
+            //     // if(waitAsyAndRes200(countStatus, postData)) {
+            //         //    websocket.emit('carPost', postData)
+            //         //    res.send('is Saved')
+            //     // }
+            //     }
+            // }, (e) => {
+            //     countStatus = 0 
+            //     res.status(400).send(e)
+            //     return
+            // })
+        }
     }
     res.send('emited')
 })

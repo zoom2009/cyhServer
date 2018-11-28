@@ -124,6 +124,7 @@ app.post('/postcardata', (req, res) => {
 //do here 2018 ***
 //get data
 app.get('/get-current-watch/:macAddr', (req, res) => {
+    moment.locale(th); 
     let timeString = moment().format('h:mm:ss')
     CurrentWatch.findOne({mac_address: req.params.macAddr}).then((d) => {
         if(!d) return res.status(400).send('not found')

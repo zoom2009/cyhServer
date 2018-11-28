@@ -135,7 +135,7 @@ function getCurrentTimeSec() {
 //do here 2018 ***
 //get data
 app.get('/get-current-watch/:macAddr', (req, res) => {
-    let overTime = 15*60
+    let overTime = 3*60
     let curTime = getCurrentTimeSec()
     CurrentWatch.findOne({mac_address: req.params.macAddr}).then((data) => {
         if(!data) return res.status(400).send('not found')

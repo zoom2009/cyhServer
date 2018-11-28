@@ -151,7 +151,7 @@ app.get('/get-current-watch-all', (req, res) => {
 })
 
 app.get('/get-current-watch/:macAddr', (req, res) => {
-    let overTime = 3*60
+    let overTime = 10*60
     let curTime = getCurrentTimeSec()
     CurrentWatch.findOne({mac_address: req.params.macAddr}).then((data) => {
         if(!data) return res.status(400).send('not found')
@@ -388,6 +388,7 @@ app.post('/signup', (req, res) => {
         schoolLocation: req.body.schoolLocation,
         picURL: req.body.picURL,
         carTabain: req.body.carTabain
+        // 8.6396029,99.8905142
     })
     newUser.save().then((doc) => {
         res.send(doc)

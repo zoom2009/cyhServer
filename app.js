@@ -130,12 +130,11 @@ function getCurrentTimeSec() {
     let s = +today.getSeconds()
     let curTime =((h*60*60)+(m*60)+s)
     console.log('current Time sec is '+ curTime)
-    return ''+curTime
+    return curTime
 }
 //do here 2018 ***
 //get data
 app.get('/get-current-watch/:macAddr', (req, res) => {
-
     CurrentWatch.findOne({mac_address: req.params.macAddr}).then((d) => {
         if(!d) return res.status(400).send('not found')
         res.send({d, time: getCurrentTimeSec()})
@@ -151,7 +150,7 @@ app.post('/post', (req, res) => {
     let postData = {
         id: req.body.id,
         date: req.body.date,
-        time: t,
+        time: getCurrentTimeSec(),
         lat: req.body.lat,
         lng: req.body.lng,
         temp: req.body.temp,
